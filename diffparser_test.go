@@ -7,9 +7,9 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/anmic/diffparser"
 	jt "github.com/juju/testing"
 	jc "github.com/juju/testing/checkers"
-	"github.com/waigani/diffparser"
 	gc "gopkg.in/check.v1"
 )
 
@@ -49,6 +49,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 		newName   string
 		Additions int
 		Deletions int
+		Hash      string
 	}{
 		{
 			mode:      diffparser.MODIFIED,
@@ -56,6 +57,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 			newName:   "file1",
 			Additions: 1,
 			Deletions: 1,
+			Hash:      "30f1681a9246bae4a64428a28e5e91136c5af6a6",
 		},
 		{
 			mode:      diffparser.DELETED,
@@ -63,6 +65,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 			newName:   "",
 			Additions: 0,
 			Deletions: 4,
+			Hash:      "3dec22e1cea6483677dfa6a7f0e89f9f5f4ecb5d",
 		},
 		{
 			mode:      diffparser.DELETED,
@@ -70,6 +73,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 			newName:   "",
 			Additions: 0,
 			Deletions: 4,
+			Hash:      "e2ffa21c1c3f03c9b001574e5176bbb9daa37b10",
 		},
 		{
 			mode:      diffparser.NEW,
@@ -77,6 +81,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 			newName:   "file4",
 			Additions: 1,
 			Deletions: 0,
+			Hash:      "89bf72b8516fcf5bf50d82963128329fc4ad32da",
 		},
 		{
 			mode:      diffparser.NEW,
@@ -84,6 +89,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 			newName:   "newname",
 			Additions: 4,
 			Deletions: 0,
+			Hash:      "4e274598f66b7e0726432d00b4a8dc666865a4ec",
 		},
 	} {
 		file := diff.Files[i]
@@ -93,6 +99,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 		c.Assert(file.NewName, gc.Equals, expected.newName)
 		c.Assert(file.Additions, gc.Equals, expected.Additions)
 		c.Assert(file.Deletions, gc.Equals, expected.Deletions)
+		c.Assert(file.Hash, gc.Equals, expected.Hash)
 	}
 }
 

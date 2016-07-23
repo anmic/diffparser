@@ -4,6 +4,8 @@
 package diffparser
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"regexp"
 	"strconv"
 	"strings"
@@ -53,6 +55,7 @@ type diffHunk struct {
 
 type DiffFile struct {
 	Mode      FileMode
+	Hash      string
 	OrigName  string
 	NewName   string
 	Additions int
@@ -129,10 +132,22 @@ func Parse(diffString string) (*Diff, error) {
 	newFilePrefix := "+++ b/"
 
 	var hunkLineCount int
+	h := sha1.New()
+
 	// Parse each line of diff.
-	for _, l := range lines {
+	for i, l := range lines {
+		_, err := h.Write([]byte(l))
+		if err != nil {
+			return nil, err
+		}
+
 		switch {
 		case strings.HasPrefix(l, "diff "):
+			if i > 0 {
+				file.Hash = hex.EncodeToString(h.Sum(nil))
+				h.Reset()
+			}
+
 			inHunk = false
 
 			// Start a new file.
@@ -237,6 +252,8 @@ func Parse(diffString string) (*Diff, error) {
 			}
 		}
 	}
+
+	file.Hash = hex.EncodeToString(h.Sum(nil))
 
 	return &diff, nil
 }
