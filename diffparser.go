@@ -253,7 +253,9 @@ func Parse(diffString string) (*Diff, error) {
 		}
 	}
 
-	file.Hash = hex.EncodeToString(h.Sum(nil))
+	if len(diffString) != 0 {
+		file.Hash = hex.EncodeToString(h.Sum(nil))
+	}
 
 	return &diff, nil
 }

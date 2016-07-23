@@ -182,3 +182,10 @@ func (s *suite) TestParseHeader(c *gc.C) {
 	c.Assert(diff.Files[0].NewName, gc.Equals, "")
 	c.Assert(diff.Files[0].Mode, gc.Equals, diffparser.DELETED)
 }
+
+func (s *suite) TestEmptyDiff(c *gc.C) {
+	diff, err := diffparser.Parse("")
+
+	c.Assert(err, jc.ErrorIsNil)
+	c.Assert(diff.Files, gc.HasLen, 0)
+}
