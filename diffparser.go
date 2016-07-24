@@ -154,13 +154,16 @@ func Parse(diffString string) (*Diff, error) {
 
 			// Start a new file.
 			file = &DiffFile{}
-			diff.Files = append(diff.Files, file)
 
 			m := diffRegexp.FindStringSubmatch(l)
-			if len(m) == 3 {
-				file.OrigName = m[1]
-				file.NewName = m[2]
+			if len(m) != 3 {
+				return &diff, nil
 			}
+
+			file.OrigName = m[1]
+			file.NewName = m[2]
+
+			diff.Files = append(diff.Files, file)
 
 			// File mode.
 			file.Mode = MODIFIED
