@@ -41,7 +41,7 @@ func (s *suite) SetUpSuite(c *gc.C) {
 func (s *suite) TestFileModeAndNaming(c *gc.C) {
 	diff, err := diffparser.Parse(s.rawdiff)
 	c.Assert(err, jc.ErrorIsNil)
-	c.Assert(diff.Files, gc.HasLen, 5)
+	c.Assert(diff.Files, gc.HasLen, 6)
 
 	for i, expected := range []struct {
 		mode      diffparser.FileMode
@@ -62,7 +62,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 		{
 			mode:      diffparser.DELETED,
 			origName:  "file2",
-			newName:   "",
+			newName:   "file2",
 			Additions: 0,
 			Deletions: 4,
 			Hash:      "3dec22e1cea6483677dfa6a7f0e89f9f5f4ecb5d",
@@ -70,14 +70,14 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 		{
 			mode:      diffparser.DELETED,
 			origName:  "file3",
-			newName:   "",
+			newName:   "file3",
 			Additions: 0,
 			Deletions: 4,
 			Hash:      "e2ffa21c1c3f03c9b001574e5176bbb9daa37b10",
 		},
 		{
 			mode:      diffparser.NEW,
-			origName:  "",
+			origName:  "file4",
 			newName:   "file4",
 			Additions: 1,
 			Deletions: 0,
@@ -85,11 +85,19 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 		},
 		{
 			mode:      diffparser.NEW,
-			origName:  "",
+			origName:  "newname",
 			newName:   "newname",
 			Additions: 4,
 			Deletions: 0,
-			Hash:      "4e274598f66b7e0726432d00b4a8dc666865a4ec",
+			Hash:      "b238bbc90ba9d102974b4470822b8e5f2da006b5",
+		},
+		{
+			mode:      diffparser.MODIFIED,
+			origName:  "static/img/background/Image/image 9.jpg",
+			newName:   "static/img/background/Image/image 9.jpg",
+			Additions: 0,
+			Deletions: 0,
+			Hash:      "2cc10b8e8c524a719e809ff2a5e565f8181cd1e0",
 		},
 	} {
 		file := diff.Files[i]
@@ -106,7 +114,7 @@ func (s *suite) TestFileModeAndNaming(c *gc.C) {
 func (s *suite) TestHunk(c *gc.C) {
 	diff, err := diffparser.Parse(s.rawdiff)
 	c.Assert(err, jc.ErrorIsNil)
-	c.Assert(diff.Files, gc.HasLen, 5)
+	c.Assert(diff.Files, gc.HasLen, 6)
 
 	expectedOrigLines := []diffparser.DiffLine{
 		{
@@ -179,7 +187,7 @@ func (s *suite) TestParseHeader(c *gc.C) {
 	c.Assert(diff.Files, gc.HasLen, 1)
 
 	c.Assert(diff.Files[0].OrigName, gc.Equals, "includes/s_header.php")
-	c.Assert(diff.Files[0].NewName, gc.Equals, "")
+	c.Assert(diff.Files[0].NewName, gc.Equals, "includes/s_header.php")
 	c.Assert(diff.Files[0].Mode, gc.Equals, diffparser.DELETED)
 }
 
