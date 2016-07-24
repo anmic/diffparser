@@ -21,6 +21,8 @@ const (
 	NEW
 )
 
+var diffRegexp = regexp.MustCompile(`diff --git a/(.*) b/(.*)$`)
+
 type diffRange struct {
 
 	// starting line number
@@ -153,6 +155,10 @@ func Parse(diffString string) (*Diff, error) {
 			// Start a new file.
 			file = &DiffFile{}
 			diff.Files = append(diff.Files, file)
+
+			m := diffRegexp.FindStringSubmatch(l)
+			file.OrigName = m[1]
+			file.NewName = m[2]
 
 			// File mode.
 			file.Mode = MODIFIED
