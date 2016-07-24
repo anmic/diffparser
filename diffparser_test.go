@@ -197,3 +197,10 @@ func (s *suite) TestEmptyDiff(c *gc.C) {
 	c.Assert(err, jc.ErrorIsNil)
 	c.Assert(diff.Files, gc.HasLen, 0)
 }
+
+func (s *suite) TestCorruptDiff(c *gc.C) {
+	diff, err := diffparser.Parse("diff --git a/file1")
+
+	c.Assert(err, jc.ErrorIsNil)
+	c.Assert(diff.Files, gc.HasLen, 1)
+}

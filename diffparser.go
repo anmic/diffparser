@@ -157,8 +157,10 @@ func Parse(diffString string) (*Diff, error) {
 			diff.Files = append(diff.Files, file)
 
 			m := diffRegexp.FindStringSubmatch(l)
-			file.OrigName = m[1]
-			file.NewName = m[2]
+			if len(m) == 3 {
+				file.OrigName = m[1]
+				file.NewName = m[2]
+			}
 
 			// File mode.
 			file.Mode = MODIFIED
